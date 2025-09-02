@@ -5,12 +5,9 @@
   "author": "Sergei Svetashev",
   "type": "module",
   "scripts": {
-    "back": "npm run dev -w @fsp/back",
-    "front": "npm run dev -w @fsp/front",
-    "start": "npm run back & npm run front"
-  },
-  "engines": {
-    "node": "20.x"
+    "back": "pnpm --filter am-back dev",
+    "front": "pnpm --filter am-front dev",
+    "start": "pnpm run back & npm run front"
   },
   "workspaces": [
     "packages/*",

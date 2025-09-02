@@ -2,7 +2,8 @@
   "imports": {
     "oak/": "https://deno.land/x/oak@v13.2.3/",
     "std/": "https://deno.land/std@0.224.0/",
-    "denomailer": "https://deno.land/x/denomailer@1.6.0/mod.ts"
+    "oak_commons/": "https://deno.land/x/oak_commons@0.6.0/",
+    "mdb": "npm:mongodb@6.19.0"
   },
   "tasks": {
     "start": "deno run --watch -A --unsafely-ignore-certificate-errors index.ts",

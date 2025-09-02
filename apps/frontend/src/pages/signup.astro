@@ -1,0 +1,10 @@
+---
+import { Title } from "../components/title";
+import Main from "../layouts/Main.astro";
+import { SignForm } from "../views/sign";
+---
+
+<Main>
+  <Title text="Sign up" />
+  <SignForm client:only="react" />
+</Main>
