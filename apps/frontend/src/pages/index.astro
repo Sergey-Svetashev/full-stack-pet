@@ -1,14 +1,11 @@
 ---
 import { Title } from "../components/title";
 import Main from "../layouts/Main.astro";
+import TEXT from "../TEXT";
 import { MainForm } from "../views/main";
-
-const { page } = Astro.props;
-
-console.log("page", page);
 ---
 
 <Main>
-  <Title text="A letter" />
+  <Title className='pb-5' text={TEXT.main.title} />
   <MainForm client:only="react" />
 </Main>

@@ -1,25 +1,42 @@
-import { FormData } from "../models";
+import { ApiError } from "../errors.ts";
+import { FormData } from "../models/index.ts";
 
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "http://localhost:8081"; // TODO
 
-export const requestHandler = (
-  data: FormData
-): Promise<{ success: boolean; message?: string }> =>
-  fetch(BASE_URL, {
+export const signHandler = async (
+  data: FormData,
+  path: "signup" | "signin"
+): Promise<{ email: string; accessToken?: string }> => {
+  const response = await fetch(`${BASE_URL}/${path}`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-  }).then(async (response) => {
-    const result = await response.json();
-    switch (response.status) {
-      case 200:
-        return { success: true, message: result.message };
-      case 401:
-      case 403:
-        return { success: false, message: result.message };
-      default:
-        return { success: false };
-    }
   });
+  const result = await response.json();
+  if (response.status !== 200) {
+    throw new ApiError(result.message, response.status);
+  }
+  return result;
+};
+
+export const accessCheck = async (
+  accessToken: string | null
+): Promise<{ email: string; accessToken: string }> => {
+  const response = await fetch(`${BASE_URL}/access-check`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+  });
+
+  const result = await response.json();
+  if (response.status !== 200) {
+    throw new ApiError(result.message, response.status);
+  }
+  return result;
+};

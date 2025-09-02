@@ -1,8 +1,12 @@
 {
-  "name": "@fsp/back",
+  "name": "am-back",
   "version": "0.0.1",
   "author": "Sergei Svetashev",
   "scripts": {
-    "dev": "deno run --watch -A --unsafely-ignore-certificate-errors index.ts"
+    "dev": "deno run --env --watch -A index.ts",
+    "deno": "deno"
+  },
+  "dependencies": {
+    "jose": "^6.1.0"
   }
 }

@@ -4,9 +4,10 @@ export type Mail = {
   request: string;
 };
 
-export interface State {
+export type State = {
   mails: Array<Mail>;
-}
+  accessToken?: string;
+};
 
 /**
  *  Kept it as a const not as a class due to absence of any complexity or additional methods.

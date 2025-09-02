@@ -4,6 +4,6 @@ export class ApiError extends Error {
     public readonly statusCode: number,
     public readonly cause?: Error
   ) {
-    super(`Error: ${message} ${cause ? `caused by ${cause.message}` : ""}`);
+    super(`${statusCode} | Error: ${message} ${cause ? `caused by ${cause.message}` : ""}`);
   }
 }

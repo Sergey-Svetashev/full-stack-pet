@@ -1,4 +1,5 @@
 import { Context, Status } from "oak/mod.ts";
+import { GenericError } from "../models/errors.ts";
 
 export const errorHandle = async (
   { response }: Context,
@@ -7,25 +8,41 @@ export const errorHandle = async (
   try {
     await next();
   } catch (error) {
-    switch (error.statusCode) {
-      case Status.NotFound:
-        response.status = Status.NotFound;
-        response.body = { message: error.message || "Not found a resource." };
+    if (error instanceof GenericError) {
+      response.status = error.statusCode;
 
-        break;
-      case Status.Forbidden:
-        response.status = Status.Forbidden;
-        response.body = { message: error.message || "User is not allowed to proceed as he is too young." };
+      switch (error.statusCode) {
+        case Status.NotFound:
+          response.body = { message: error.message || "Not found a resource." };
+          break;
+        case Status.Forbidden:
+          response.body = {
+            message: error.message || "User does not exist. Please register.",
+          };
+          break;
+        case Status.UnavailableForLegalReasons:
+          response.body = {
+            message:
+              error.message ||
+              "User is not allowed to proceed as he is too young.",
+          };
+          break;
+        case Status.Unauthorized:
+          response.body = {
+            message: error.message || "Unauthorized. Please Sign In.",
+          };
+          break;
+        default:
+          response.status = Status.InternalServerError;
+          response.body = {
+            message: error.message || "Unhandled server error.",
+          };
+      }
+    } else {
+      console.log({ cause: error });
 
-        break;
-      case Status.Unauthorized:
-        response.status = Status.Unauthorized;
-        response.body = { message: error.message || "User does not exist. Please register." };
-
-        break;
-      default:
-        response.status = 500;
-        response.body = { message: error.message || "Unhandled error." };
+      response.status = Status.InternalServerError;
+      response.body = { message: "Unexpected error. Please try again later." };
     }
   }
 };
